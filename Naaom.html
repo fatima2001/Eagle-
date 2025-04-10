@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <title>حساب أرباح VIP</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      text-align: center;
+      padding: 40px;
+      direction: rtl;
+    }
+    h1 {
+      margin-bottom: 30px;
+    }
+    input, select, button {
+      padding: 10px;
+      font-size: 16px;
+      margin: 10px;
+      width: 250px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+    button {
+      background-color: #007bff;
+      color: white;
+      cursor: pointer;
+    }
+    .result {
+      margin-top: 20px;
+      font-size: 20px;
+      font-weight: bold;
+      color: green;
+    }
+    .footer {
+      margin-top: 50px;
+      font-size: 14px;
+      color: #555;
+    }
+    .footer a {
+      color: #007bff;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>حاسبة سحب الأرباح حسب مستوى VIP</h1>
+
+  <input type="number" id="balance" placeholder="أدخل المبلغ الذي تملكه">
+  
+  <select id="vipLevel">
+    <option value="1">VIP 1 (70 - 150)</option>
+    <option value="2">VIP 2 (150 - 300)</option>
+    <option value="3">VIP 3 (300 - 500)</option>
+    <option value="4">VIP 4 (500 - 800)</option>
+    <option value="5">VIP 5 (800 - 1500)</option>
+    <option value="6">VIP 6 (1500 - 3000)</option>
+    <option value="7">VIP 7 (3000 - 5000)</option>
+    <option value="8">VIP 8 (5000 - 8000)</option>
+    <option value="9">VIP 9 (8000 - 15000)</option>
+    <option value="10">VIP 10 (15000 - 30000)</option>
+    <option value="11">VIP 11 (30000 - 50000)</option>
+    <option value="12">VIP 12 (50000 - 80000)</option>
+    <option value="13">VIP 13 (80000 - 150000)</option>
+  </select>
+  
+  <br>
+  <button onclick="calculateWithdraw()">احسب كم تكدر تسحب</button>
+
+  <div class="result" id="resultBox"></div>
+
+  <div class="footer">
+    جميع الحقوق محفوظة &copy; <a href="https://t.me/etekeagle" target="_blank">قناتي على التليجرام</a>
+  </div>
+
+  <script>
+    const vipLevels = {
+      1: 70,
+      2: 150,
+      3: 300,
+      4: 500,
+      5: 800,
+      6: 1500,
+      7: 3000,
+      8: 5000,
+      9: 8000,
+      10: 15000,
+      11: 30000,
+      12: 50000,
+      13: 80000
+    };
+
+    function calculateWithdraw() {
+      const balance = parseFloat(document.getElementById("balance").value);
+      const vip = parseInt(document.getElementById("vipLevel").value);
+      const minValue = vipLevels[vip];
+      const resultBox = document.getElementById("resultBox");
+
+      if (isNaN(balance) || balance < minValue) {
+        resultBox.innerText = "يرجى إدخال مبلغ صالح أكبر من الحد الأدنى للمستوى.";
+        resultBox.style.color = "red";
+        return;
+      }
+
+      // نحل المعادلة:
+      // balance - S - (0.17*S + 2) ≥ minValue
+      // balance - 1.17S - 2 ≥ minValue
+      // 1.17S ≤ balance - minValue - 2
+      // S ≤ (balance - minValue - 2) / 1.17
+
+      const maxS = (balance - minValue - 2) / 1.17;
+      if (maxS <= 0) {
+        resultBox.innerText = "لا يمكن السحب دون التأثير على رأس المال.";
+        resultBox.style.color = "red";
+      } else {
+        const finalAmount = maxS.toFixed(2);
+        resultBox.innerText = `أقصى مبلغ ممكن تسحبه: ${finalAmount}`;
+        resultBox.style.color = "green";
+      }
+    }
+  </script>
+</body>
+</html>
